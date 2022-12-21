@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_nav"
+    app:startDestination="@id/action_home">
+    <fragment
+        android:id="@+id/action_home"
+        android:name="com.example.klclaundry.MainPages.HomeFragment"
+        android:label="fragment_home1"
+        tools:layout="@layout/fragment_home1" >
+        <action
+            android:id="@+id/action_homeFragment_to_notFragment"
+            app:destination="@id/action_note"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@animator/nav_default_enter_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/action_note"
+        android:name="com.example.klclaundry.MainPages.NotificationFragment"
+        android:label="fragment_not"
+        tools:layout="@layout/fragment_not" >
+        <action
+            android:id="@+id/action_notFragment_to_homeFragment"
+            app:destination="@id/action_home"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_enter_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_enter_anim" />
+    </fragment>
+</navigation>
