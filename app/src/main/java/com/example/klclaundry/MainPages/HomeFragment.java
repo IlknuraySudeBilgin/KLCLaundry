@@ -181,18 +181,19 @@ public class HomeFragment extends Fragment {
 
     }
 
+
     protected void updateStates(int value) {
         if (value == 0) {
             StatementText.setText("henüz işleme girmedi");
-            //StateImg.setImageResource(getResources().getIdentifier("basket", "drawable", getActivity().get));
+            StateImg.setImageResource(R.drawable.basket);
         }
         else if(value == 1) {
             StatementText.setText("yıkanıyor");
-            //StateImg.setImageResource(getResources().getIdentifier("washing", "drawable", getContext().getPackageName()));
+            StateImg.setImageResource(R.drawable.washing);
         }
         else if(value == 2) {
             StatementText.setText("kurutuluyor");
-            //StateImg.setImageResource(getResources().getIdentifier("laundry", "drawable", getContext().getPackageName()));
+            StateImg.setImageResource(R.drawable.laundry);
         }
         else if(value == 3) {
             StatementText.setText("çıktı");
@@ -200,8 +201,7 @@ public class HomeFragment extends Fragment {
             StatementText.setScaleY(1.5F);
             StateImg.setScaleX(1.5F);
             StateImg.setScaleY(1.5F);
-
-           //StateImg.setImageResource(getResources().getIdentifier("towels", "drawable", getContext().getPackageName()));
+            StateImg.setImageResource(R.drawable.towels);
         }
 
     }

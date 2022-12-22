@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,14 +24,15 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class loginScreen extends AppCompatActivity {
     private Button logButton,signUp;
-    private ConstraintLayout Layout;
+    private ProgressBar progressBar;
     private TextView upPageText, downPageText;
     private EditText userNameText, passwordText;
     private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
-    private SharedPreferences sp,sp2;
+    private SharedPreferences sp;
 
     String Email,Passwd;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,12 @@ public class loginScreen extends AppCompatActivity {
                 });
     }
     protected void events() {
+        downPageText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"saklı dedik ya !",Toast.LENGTH_SHORT).show();
+            }
+        });
         logButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,6 +86,7 @@ public class loginScreen extends AppCompatActivity {
                 }
 
                 else {
+                    progressBar.setVisibility(View.VISIBLE);
                     Login();
                 }
 
@@ -94,16 +103,17 @@ public class loginScreen extends AppCompatActivity {
     }
 
     protected  void initialize() {
-        //Layout.setBackgroundColor(getResources().getColor(R.color.bebekmavi)); //renk ekleme
+        progressBar.setVisibility(View.INVISIBLE);
         logButton.setText("LOG IN");
         signUp.setText("SIGN UP");
-        upPageText.setText("KLCLAUNDRY uygulamasına hoş geldiniz");
-        downPageText.setText("bedir karaabalı");
+        upPageText.setText("KLCLAUNDRY");
+        downPageText.setText("tüm hakları saklıdır");
+        downPageText.setClickable(true);
         userNameText.setText(sp.getString("email",""));
         passwordText.setText(sp.getString("password",""));
     }
     protected void definitions() {
-        //Layout = findViewById(R.id.backgroundLogin);
+        progressBar = findViewById(R.id.progressBar);
         logButton = findViewById(R.id.logScreenLoginButton);
         upPageText = findViewById(R.id.logScreenText);
         downPageText = findViewById(R.id.logScreenUnderText);
@@ -130,6 +140,12 @@ public class loginScreen extends AppCompatActivity {
         edt.putString("user",userName);
         edt.commit();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
 }

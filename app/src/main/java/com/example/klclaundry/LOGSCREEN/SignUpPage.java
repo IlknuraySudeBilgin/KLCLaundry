@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ public class SignUpPage extends AppCompatActivity {
     private TextView notification;
     private FirebaseAuth mAuth;
     private ProgressBar progress;
+    private ImageView img;
 
     private String getEmail,pass1;
 
@@ -87,6 +89,13 @@ public class SignUpPage extends AppCompatActivity {
         return true;
     }
     protected void events() {
+
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"kullanıcıadi@___.com şeklinde giriş yapınız. ",Toast.LENGTH_LONG).show();
+            }
+        });
         signButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,6 +107,8 @@ public class SignUpPage extends AppCompatActivity {
     }
 
     protected void definitions() {
+        img = findViewById(R.id.imageInfo);
+        img.setClickable(true);
         signButton = findViewById(R.id.signUpButton);
         progress = findViewById(R.id.signUpProgressBar);
         progress.setVisibility(View.INVISIBLE);

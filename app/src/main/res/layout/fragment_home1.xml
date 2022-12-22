@@ -20,10 +20,12 @@
 
         <TextView
             android:id="@+id/homeText"
-            android:layout_width="175dp"
+            android:layout_width="wrap_content"
             android:layout_height="46dp"
             android:layout_marginBottom="40dp"
             android:text="TextView"
+            android:textSize="30sp"
+            android:textColor="@color/mavi4"
             app:layout_constraintBottom_toTopOf="@+id/homeView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
