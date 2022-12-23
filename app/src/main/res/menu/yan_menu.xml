@@ -9,6 +9,10 @@
         android:title="hakkında"
         app:showAsAction="always" />
     <item
+        android:id="@+id/openOrClose"
+        android:icon="@drawable/ic_baseline_lock_24"
+        android:title="ÇAMAŞIRHANE: " />
+    <item
         android:id="@+id/ChangeUsername"
         android:icon="@android:drawable/ic_menu_edit"
         android:title="kullanıcı adı yenile"

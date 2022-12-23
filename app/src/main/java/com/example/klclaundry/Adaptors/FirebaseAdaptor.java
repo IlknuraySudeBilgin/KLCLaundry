@@ -8,14 +8,21 @@ import com.google.firebase.database.Query;
 public class FirebaseAdaptor {
 
     private DatabaseReference dbref;
+    private DatabaseReference dbref2;
+
     private FirebaseDatabase database = FirebaseDatabase.getInstance("https://klclaundry-f42ea-default-rtdb.europe-west1.firebasedatabase.app/"); //database adresi
 
     public FirebaseAdaptor () {
         dbref = database.getReference(); //Nesne cagrildiginda adaptor olusturuluyor
+        dbref2 = database.getReference("laundry");
     }
 
     public Task<Void> add (UserAdaptor user) {
         return dbref.child(user.getId()).setValue(user);//kullanici bilgilerini tutmak için oluşturulan sınıf database'e itiliyo
+    }
+
+    public Task<Void> LaundryOpenOrClose(boolean state) {
+        return dbref2.child("laundry").setValue(state);
     }
 
     public Task<Void> remove(String id) {

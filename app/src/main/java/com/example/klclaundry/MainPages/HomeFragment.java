@@ -215,6 +215,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 currentUser = new UserAdaptor(name,-1,id); // kullanıcı ekleme
+                UserAdaptor lastCurrent = currentUser;
+
                 for (DataSnapshot d: snapshot.getChildren()) {
                     UserAdaptor tempUser = d.getValue(UserAdaptor.class);
 
@@ -225,7 +227,9 @@ public class HomeFragment extends Fragment {
                 }
                 name = currentUser.getName();
                 pushToMemo();
-                updateStates(currentUser.getStatement());
+
+                if (lastCurrent.getStatement() != currentUser.getStatement())
+                    updateStates(currentUser.getStatement());
 
             }
 
@@ -243,8 +247,11 @@ public class HomeFragment extends Fragment {
                 allUsers.clear(); //liste bosaltılıyo
                 for (DataSnapshot d: snapshot.getChildren()) {
                     user = d.getValue(UserAdaptor.class);
-                    allUsers.add(user); // tekrar dolduruluyo eger bosaltılmazsa varolan listeye ekleme yapılır
+                    if (!d.getRef().getKey().equals("laundry")) // laundry 'i görme
+                        allUsers.add(user); // tekrar dolduruluyo eger bosaltılmazsa varolan listeye ekleme yapılır
+
                 }
+
                 userCard.notifyDataSetChanged();
 
 

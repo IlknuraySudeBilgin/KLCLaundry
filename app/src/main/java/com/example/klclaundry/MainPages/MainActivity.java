@@ -32,6 +32,7 @@ import com.example.klclaundry.Adaptors.UserAdaptor;
 import com.example.klclaundry.MainPages.SideMenu.changePage;
 import com.example.klclaundry.R;
 import com.example.klclaundry.Services.PreferenceService;
+import com.example.klclaundry.Services.pushNotService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private Toolbar toolbar;
+    private int openCounter=0;
     private PreferenceService pService;
     private FirebaseAdaptor firebaseAdaptor;
     private UserAdaptor currentUser;
@@ -100,13 +102,28 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.shutTheProg:
-
                         System.exit(1);
                         break;
 
                     case R.id.about:
-                        //pushNot("naber","bro");
                         break;
+
+                    case R.id.openOrClose:
+                        pushNotService pService = new pushNotService(getApplicationContext());
+                        FirebaseAdaptor firebaseAdaptor = new FirebaseAdaptor();
+                        openCounter++;
+                        if (openCounter%2 == 0) {
+                            firebaseAdaptor.LaundryOpenOrClose(false);
+                            item.setTitle("ÇAMAŞIRHANE: KAPALI");
+                            item.setIcon(R.drawable.ic_baseline_lock_24);
+                            //pService.connect();
+                            openCounter=0;
+                        } else {
+                            firebaseAdaptor.LaundryOpenOrClose(true);
+                            item.setTitle("ÇAMAŞIRHANE: AÇIK");
+                            item.setIcon(R.drawable.ic_baseline_lock_open_24);
+                        }
+
                 }
 
 
@@ -114,23 +131,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
-    public void pushNot(String title, String body) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("1","1", NotificationManager.IMPORTANCE_HIGH);
-
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        }
-
-        NotificationCompat.Builder b = new NotificationCompat.Builder(getApplicationContext(),"1");
-        b.setContentTitle(title);
-        b.setContentText(body);
-        b.setSmallIcon(R.drawable.mngpng);
-        b.setAutoCancel(true);
-
-        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getApplicationContext());
-        managerCompat.notify(1,b.build());
     }
 
     @Override
@@ -144,45 +144,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    protected void loadDataforUser() {
-        id = pService.get("id","");
-        name = pService.get("name","");
-        currentUser = new UserAdaptor(name,-1,id);
-        firebaseAdaptor.get().addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot d: snapshot.getChildren()) {
-                    UserAdaptor tempUser = d.getValue(UserAdaptor.class);
-
-                    if (tempUser.getId().equals(id)) {
-                        currentUser = tempUser;
-                        break;
-                    }
-                }
-
-                switch (currentUser.getStatement()) {
-                    case 0:
-                        pushNot("ÇAMAŞIRHANE","sıraya girdiniz");
-                        break;
-                    case 1:
-                        pushNot("ÇAMAŞIRHANE","kurutmada");
-                        break;
-                    case 2:
-                        pushNot("ÇAMAŞIRHANE","yıkanıyor");
-                        break;
-                    case 3:
-                        pushNot("ÇAMAŞIRHANE","çamaşırlarınız çıktı");
-                        break;
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
 
 }

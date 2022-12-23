@@ -10,10 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.example.klclaundry.Adaptors.FirebaseAdaptor;
 import com.example.klclaundry.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 
 public class pushNotService {
 
@@ -23,6 +25,10 @@ public class pushNotService {
         this.cnt = cnt;
     }
 
+    public void send() {
+
+        //FirebaseMessaging.getInstance().send();
+    }
     public void connect() {
 
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
