@@ -49,9 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private int openCounter=0;
     private PreferenceService pService;
-    private FirebaseAdaptor firebaseAdaptor;
-    private UserAdaptor currentUser;
-    private String  id,name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,20 +106,26 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.openOrClose:
-                        pushNotService pService = new pushNotService(getApplicationContext());
-                        FirebaseAdaptor firebaseAdaptor = new FirebaseAdaptor();
-                        openCounter++;
-                        if (openCounter%2 == 0) {
-                            firebaseAdaptor.LaundryOpenOrClose(false);
-                            item.setTitle("ÇAMAŞIRHANE: KAPALI");
-                            item.setIcon(R.drawable.ic_baseline_lock_24);
-                            //pService.connect();
-                            openCounter=0;
-                        } else {
-                            firebaseAdaptor.LaundryOpenOrClose(true);
-                            item.setTitle("ÇAMAŞIRHANE: AÇIK");
-                            item.setIcon(R.drawable.ic_baseline_lock_open_24);
+
+                        if (pService.get("id","").equals("admin")) {
+                            //pushNotService pService = new pushNotService(getApplicationContext());
+                            FirebaseAdaptor firebaseAdaptor = new FirebaseAdaptor();
+                            openCounter++;
+                            if (openCounter%2 == 0) {
+                                pService.pushInt("openorclose",0);
+                                firebaseAdaptor.LaundryOpenOrClose(false);
+                                item.setTitle("ÇAMAŞIRHANE: KAPALI");
+                                item.setIcon(R.drawable.ic_baseline_lock_24);
+                                //pService.connect();
+                                openCounter=0;
+                            } else {
+                                pService.pushInt("openorclose",1);
+                                firebaseAdaptor.LaundryOpenOrClose(true);
+                                item.setTitle("ÇAMAŞIRHANE: AÇIK");
+                                item.setIcon(R.drawable.ic_baseline_lock_open_24);
+                            }
                         }
+
 
                 }
 

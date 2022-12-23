@@ -85,7 +85,6 @@ public class HomeFragment extends Fragment {
     protected void initialize() {
         defaultSizes();
         loadDataforUser();
-        homeText.setText("LAUNDRY");
         StatementText.setText("her hangi bir işlem yok");
         homeText.setVisibility(View.VISIBLE);
         StatementText.setVisibility(View.VISIBLE);
@@ -220,10 +219,14 @@ public class HomeFragment extends Fragment {
                 for (DataSnapshot d: snapshot.getChildren()) {
                     UserAdaptor tempUser = d.getValue(UserAdaptor.class);
 
-                    if (tempUser.getId().equals(id)) {
-                        currentUser = tempUser;
-                        break;
+                    if (!d.getRef().getKey().equals("laundry")) {
+
+                        if (tempUser.getId().equals(id)) {
+                            currentUser = tempUser;
+                            break;
+                        }
                     }
+
                 }
                 name = currentUser.getName();
                 pushToMemo();
@@ -294,5 +297,8 @@ public class HomeFragment extends Fragment {
         super.onResume();
         whatIsUserName();
         notif = new pushNotService(getActivity());
+
+        if (sp.getInt("openorclose",0) == 0) homeText.setText("ÇAMAŞIRHANE:KAPALI");
+        else homeText.setText("ÇAMAŞIRHANE:AÇIK");
     }
 }
