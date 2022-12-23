@@ -53,18 +53,19 @@ public class loginScreen extends AppCompatActivity {
     }
 
     protected void  Login() {
-        mAuth.signInWithEmailAndPassword(Email, Passwd)
+        mAuth.signInWithEmailAndPassword(Email, Passwd) //dokumantasyon
                 .addOnSuccessListener(this ,new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         RegTheMemo();
-                        RegtoUsername();
+                        RegTheId();
                         startActivity(new Intent(loginScreen.this, MainActivity.class));
                     }
                 }) .addOnFailureListener(this, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(loginScreen.this, e.getMessage().toString(),Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
     }
@@ -75,6 +76,7 @@ public class loginScreen extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"saklı dedik ya !",Toast.LENGTH_SHORT).show();
             }
         });
+
         logButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,6 +114,7 @@ public class loginScreen extends AppCompatActivity {
         userNameText.setText(sp.getString("email",""));
         passwordText.setText(sp.getString("password",""));
     }
+
     protected void definitions() {
         progressBar = findViewById(R.id.progressBar);
         logButton = findViewById(R.id.logScreenLoginButton);
@@ -125,7 +128,7 @@ public class loginScreen extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    protected void RegtoUsername() {
+    protected void RegTheId() {
 
         char[] chars = Email.toCharArray();
         String userName="";
@@ -135,12 +138,13 @@ public class loginScreen extends AppCompatActivity {
             }
         }
         //giriş yapan son kişinin kullanıcı adı
-        SharedPreferences sp2 = getSharedPreferences("userName",MODE_PRIVATE);
+        SharedPreferences sp2 = getSharedPreferences("USERNAME",MODE_PRIVATE); //USERNAME -> id
         SharedPreferences.Editor edt = sp2.edit();
-        edt.putString("user",userName);
-        edt.commit();
+        edt.putString("id",userName);
+        edt.apply();
 
     }
+
 
     @Override
     protected void onResume() {

@@ -1,6 +1,7 @@
 package com.example.klclaundry.CardViews;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,10 +42,6 @@ public class UsersCardView extends RecyclerView.Adapter<UsersCardView.HolderDesi
 
     @Override
     public void onBindViewHolder(@NonNull HolderDesign holder, int position) {
-        holder.but1.setBackgroundColor(12);
-        holder.but2.setBackgroundColor(12);
-        holder.but3.setBackgroundColor(12);
-        holder.but4.setBackgroundColor(12);
 
         UserAdaptor user = users.get(position);
 
@@ -54,25 +51,28 @@ public class UsersCardView extends RecyclerView.Adapter<UsersCardView.HolderDesi
         }
 
 
-        if (user.getStatement() == 1) {
+        else if (user.getStatement() == 1) {
             holder.but2.setScaleX(1.2F);
             holder.but2.setScaleY(1.2F);
         }
 
-        if (user.getStatement() == 2) {
+        else if (user.getStatement() == 2) {
             holder.but3.setScaleX(1.2F);
             holder.but3.setScaleY(1.2F);
         }
 
-        if (user.getStatement() == 3) {
+        else if (user.getStatement() == 3) {
             holder.but4.setScaleX(1.2F);
             holder.but4.setScaleY(1.2F);
         }
+
         holder.userName.setText(user.getName());
+
 
         holder.but1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i("button state: ","buton1");
                 defaultState(holder,1);
                 user.setStatement(0);
                 firebaseAdaptor.update(user);
@@ -82,6 +82,7 @@ public class UsersCardView extends RecyclerView.Adapter<UsersCardView.HolderDesi
         holder.but2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i("button state: ","buton2");
                 defaultState(holder,2);
                 user.setStatement(1);
                 firebaseAdaptor.update(user);
@@ -91,6 +92,7 @@ public class UsersCardView extends RecyclerView.Adapter<UsersCardView.HolderDesi
         holder.but3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i("button state: ","buton3");
                 defaultState(holder,3);
                 user.setStatement(2);
                 firebaseAdaptor.update(user);
@@ -100,13 +102,15 @@ public class UsersCardView extends RecyclerView.Adapter<UsersCardView.HolderDesi
         holder.but4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i("button state: ","buton4");
                 defaultState(holder,4);
-                user.setStatement(3);
+                user.setStatement(3);//0 YIKANCAK 1 YIKANIYO // 2 KURUTULUYO //3 CIKTI
                 firebaseAdaptor.update(user);
             }
         });
     }
 
+    @SuppressLint("ResourceAsColor")
     public void defaultState(HolderDesign holder, int i) {
         if(i==1) {
             holder.but1.setScaleX(1.2F);
@@ -117,6 +121,7 @@ public class UsersCardView extends RecyclerView.Adapter<UsersCardView.HolderDesi
             holder.but3.setScaleY(1F);
             holder.but4.setScaleX(1F);
             holder.but4.setScaleY(1F);
+            //
         }
         if(i==2) {
             holder.but1.setScaleX(1F);
@@ -127,6 +132,7 @@ public class UsersCardView extends RecyclerView.Adapter<UsersCardView.HolderDesi
             holder.but3.setScaleY(1F);
             holder.but4.setScaleX(1F);
             holder.but4.setScaleY(1F);
+            //
         }
         if(i==3) {
             holder.but1.setScaleX(1F);
@@ -137,6 +143,7 @@ public class UsersCardView extends RecyclerView.Adapter<UsersCardView.HolderDesi
             holder.but3.setScaleY(1.2F);
             holder.but4.setScaleX(1F);
             holder.but4.setScaleY(1F);
+            //
         }
         if(i==4) {
             holder.but1.setScaleX(1F);
@@ -147,6 +154,7 @@ public class UsersCardView extends RecyclerView.Adapter<UsersCardView.HolderDesi
             holder.but3.setScaleY(1F);
             holder.but4.setScaleX(1.2F);
             holder.but4.setScaleY(1.2F);
+            //
         }
 
     }

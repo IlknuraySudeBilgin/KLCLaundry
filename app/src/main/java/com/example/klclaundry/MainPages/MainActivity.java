@@ -27,19 +27,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.klclaundry.Adaptors.FirebaseAdaptor;
+import com.example.klclaundry.Adaptors.UserAdaptor;
 import com.example.klclaundry.MainPages.SideMenu.changePage;
 import com.example.klclaundry.R;
+import com.example.klclaundry.Services.PreferenceService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
+import javax.inject.Singleton;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
     private NavigationView navigationView;
-    private SharedPreferences sp;
-    private String name;
     private DrawerLayout drawer;
     private Toolbar toolbar;
+    private PreferenceService pService;
+    private FirebaseAdaptor firebaseAdaptor;
+    private UserAdaptor currentUser;
+    private String  id,name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("ResourceAsColor")
     protected void definetions() {
-
+        pService = new PreferenceService(getApplicationContext());
         navigationView = findViewById(R.id.navView);
         drawer = findViewById(R.id.drawer);
         toolbar = findViewById(R.id.toolbar);
@@ -67,16 +77,19 @@ public class MainActivity extends AppCompatActivity {
 
         toggle.syncState();
 
-        bottomNavigationView = findViewById(R.id.bottomNav);
+        bottomNavigationView = findViewById(R.id.bottomNav); //bttom nav bul
         NavHostFragment navHostFragment = (NavHostFragment)
-                getSupportFragmentManager().findFragmentById(R.id.FragmentNav);
+                getSupportFragmentManager().findFragmentById(R.id.FragmentNav); // göstericiyi bul
 
-        NavigationUI.setupWithNavController(bottomNavigationView,
+        NavigationUI.setupWithNavController(bottomNavigationView, //bagla
                 navHostFragment.getNavController());
 
     }
 
     protected void events() {
+
+        //loadDataforUser();
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -87,10 +100,12 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.shutTheProg:
+
                         System.exit(1);
                         break;
 
                     case R.id.about:
+                        //pushNot("naber","bro");
                         break;
                 }
 
@@ -124,9 +139,50 @@ public class MainActivity extends AppCompatActivity {
             drawer.closeDrawer(GravityCompat.START);
         }
         else {
-
             super.onBackPressed();
         }
 
     }
+
+    protected void loadDataforUser() {
+        id = pService.get("id","");
+        name = pService.get("name","");
+        currentUser = new UserAdaptor(name,-1,id);
+        firebaseAdaptor.get().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot d: snapshot.getChildren()) {
+                    UserAdaptor tempUser = d.getValue(UserAdaptor.class);
+
+                    if (tempUser.getId().equals(id)) {
+                        currentUser = tempUser;
+                        break;
+                    }
+                }
+
+                switch (currentUser.getStatement()) {
+                    case 0:
+                        pushNot("ÇAMAŞIRHANE","sıraya girdiniz");
+                        break;
+                    case 1:
+                        pushNot("ÇAMAŞIRHANE","kurutmada");
+                        break;
+                    case 2:
+                        pushNot("ÇAMAŞIRHANE","yıkanıyor");
+                        break;
+                    case 3:
+                        pushNot("ÇAMAŞIRHANE","çamaşırlarınız çıktı");
+                        break;
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 }

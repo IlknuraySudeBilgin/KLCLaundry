@@ -27,13 +27,12 @@ import com.google.firebase.auth.FirebaseAuth;
 public class SignUpPage extends AppCompatActivity {
 
     private Button signButton;
-    private EditText email,passwd1, passwd2;
+    private EditText email,passwd1, passwd2,userName;
     private TextView notification;
     private FirebaseAuth mAuth;
     private ProgressBar progress;
     private ImageView img;
-
-    private String getEmail,pass1;
+    private String getEmail,pass1,getUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +75,14 @@ public class SignUpPage extends AppCompatActivity {
     }
 
     protected boolean entriesControl() {
+        getUsername = userName.getText().toString();
         getEmail = email.getText().toString();
         pass1 = passwd1.getText().toString();
         String pass2 = passwd2.getText().toString();
 
+        if (getUsername.isEmpty()) {
+            Toast.makeText(getApplicationContext(),"kullanıcı adı boş bıraklımaz",Toast.LENGTH_SHORT).show();
+        }
         if (Iswrong(getEmail)) {
             return false;
         }
@@ -107,6 +110,7 @@ public class SignUpPage extends AppCompatActivity {
     }
 
     protected void definitions() {
+        userName = findViewById(R.id.getUsername);
         img = findViewById(R.id.imageInfo);
         img.setClickable(true);
         signButton = findViewById(R.id.signUpButton);
@@ -117,7 +121,7 @@ public class SignUpPage extends AppCompatActivity {
         passwd2 = findViewById(R.id.signUppasswordagain);
         notification = findViewById(R.id.signUpScreenText);
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();//nesne oluşturduk internete baglanmak için
 
     }
 
@@ -128,10 +132,10 @@ public class SignUpPage extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if (task.isSuccessful()) {
+
                             Toast.makeText(getApplicationContext(), "kayıt başarılı",Toast.LENGTH_LONG).show();
                             progress.setVisibility(View.VISIBLE);
-                            //sleep(1500);
-                            //progress.setVisibility(View.INVISIBLE);
+
                             startActivity(new Intent(SignUpPage.this, loginScreen.class));
                         }
                         else {

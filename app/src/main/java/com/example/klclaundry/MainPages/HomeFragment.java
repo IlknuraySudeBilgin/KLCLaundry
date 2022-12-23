@@ -1,8 +1,5 @@
 package com.example.klclaundry.MainPages;
 
-import static android.content.Context.MODE_PRIVATE;
-
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,7 +19,8 @@ import com.example.klclaundry.Adaptors.FirebaseAdaptor;
 import com.example.klclaundry.Adaptors.UserAdaptor;
 import com.example.klclaundry.CardViews.UsersCardView;
 import com.example.klclaundry.R;
-import com.example.klclaundry.Services.pushNot;
+import com.example.klclaundry.Services.PreferenceService;
+import com.example.klclaundry.Services.pushNotService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,9 +38,9 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private UsersCardView userCard;
     private  FirebaseAdaptor firebaseAdaptor;
-    private  String name;
-    //private pushNot notif = new pushNot();
-    private SharedPreferences sp;
+    private  String name,id;
+    private PreferenceService sp;
+    private pushNotService notif;
     private UserAdaptor user,currentUser;
     private ArrayList<UserAdaptor> allUsers = new ArrayList<>();
 
@@ -52,9 +50,10 @@ public class HomeFragment extends Fragment {
 
         root = inflater.inflate(R.layout.fragment_home1, container, false);
 
-        sp = getActivity().getSharedPreferences("userName",MODE_PRIVATE);
-        name = sp.getString("user","");
 
+        whatIsUserName();
+
+        //Toast.makeText(getContext(),name,Toast.LENGTH_SHORT).show();
         defaultdefinetions();
 
         if (IsAdmin()) {
@@ -107,7 +106,7 @@ public class HomeFragment extends Fragment {
 
     // tüm adminler burda tanımlı
     protected boolean IsAdmin() {
-        if(name.equals("admin")) return true;
+        if(id.equals("admin")) return true;
         else return false;
 
     }
@@ -120,8 +119,9 @@ public class HomeFragment extends Fragment {
                 if (currentUser.getStatement() != -1) {
                     Toast.makeText(getContext(),"zaten işlem sırasındasın! ",Toast.LENGTH_SHORT).show();
                 } else {
+                    Log.i("name:2 ",name);
                     Toast.makeText(getContext(),name,Toast.LENGTH_SHORT).show();
-                    UserAdaptor user = new UserAdaptor(name,0,name);
+                    UserAdaptor user = new UserAdaptor(name,0,id);
                     addFloating.setVisibility(View.INVISIBLE);
                     firebaseAdaptor.add(user);
                 }
@@ -186,14 +186,17 @@ public class HomeFragment extends Fragment {
         if (value == 0) {
             StatementText.setText("henüz işleme girmedi");
             StateImg.setImageResource(R.drawable.basket);
+            notif.senNotification("sıraya girdiniz","ÇAMAŞIRHANE");
         }
         else if(value == 1) {
             StatementText.setText("yıkanıyor");
             StateImg.setImageResource(R.drawable.washing);
+            notif.senNotification("yıkanıyor","ÇAMAŞIRHANE");
         }
         else if(value == 2) {
             StatementText.setText("kurutuluyor");
             StateImg.setImageResource(R.drawable.laundry);
+            notif.senNotification("kurutuluyor","ÇAMAŞIRHANE");
         }
         else if(value == 3) {
             StatementText.setText("çıktı");
@@ -202,6 +205,7 @@ public class HomeFragment extends Fragment {
             StateImg.setScaleX(1.5F);
             StateImg.setScaleY(1.5F);
             StateImg.setImageResource(R.drawable.towels);
+            notif.senNotification("çıktı","ÇAMAŞIRHANE");
         }
 
     }
@@ -210,18 +214,19 @@ public class HomeFragment extends Fragment {
         firebaseAdaptor.get().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                currentUser = new UserAdaptor(name,-1,id); // kullanıcı ekleme
                 for (DataSnapshot d: snapshot.getChildren()) {
                     UserAdaptor tempUser = d.getValue(UserAdaptor.class);
 
-                    if (tempUser.getName().equals(name)) {
+                    if (tempUser.getId().equals(id)) {
                         currentUser = tempUser;
                         break;
-                    } else {
-                        currentUser = new UserAdaptor(name,-1,name);
                     }
                 }
-
+                name = currentUser.getName();
+                pushToMemo();
                 updateStates(currentUser.getStatement());
+
             }
 
             @Override
@@ -253,4 +258,34 @@ public class HomeFragment extends Fragment {
     }
 
 
+
+
+    protected void pushToMemo() {
+        //sp = getActivity().getSharedPreferences("USERNAME", MODE_PRIVATE);
+        //SharedPreferences.Editor edt = sp.edit();
+        //edt.putString("name",name);
+        //edt.apply();
+        sp.push("name",name);
+        sp.push("id",id);
+        sp.pushInt("state",currentUser.getStatement());
+    }
+
+    protected void whatIsUserName() {
+        //sp = requireActivity().getSharedPreferences("USERNAME", MODE_PRIVATE);
+        //id = sp.getString("id","");
+        //name = id;
+        sp = new PreferenceService(getActivity());
+        id = sp.get("id",id);
+        name = id;
+    }
+
+    @Override
+    public void onResume() {
+        //activite her degistiginde shared preference icin NULL deger doner
+        //ama onResume devam eden programda her bir context 'ten kopan fragment olayı için
+        //yeni bir activite id'si döndürecek ve null pointer hatası ortadan kalkacaktır
+        super.onResume();
+        whatIsUserName();
+        notif = new pushNotService(getActivity());
+    }
 }
