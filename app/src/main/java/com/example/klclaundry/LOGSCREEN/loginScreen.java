@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.klclaundry.MainPages.MainActivity;
 import com.example.klclaundry.R;
+import com.example.klclaundry.Services.PreferenceService;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -28,7 +29,7 @@ public class loginScreen extends AppCompatActivity {
     private TextView upPageText, downPageText;
     private EditText userNameText, passwordText;
     private FirebaseAuth mAuth;
-    private SharedPreferences sp;
+    private PreferenceService pService;
 
     String Email,Passwd;
 
@@ -45,19 +46,12 @@ public class loginScreen extends AppCompatActivity {
 
     }
 
-    protected void RegTheMemo() {
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("email",Email);
-        editor.putString("password",Passwd);
-        editor.commit();
-    }
 
     protected void  Login() {
         mAuth.signInWithEmailAndPassword(Email, Passwd) //dokumantasyon
                 .addOnSuccessListener(this ,new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
-                        RegTheMemo();
                         RegTheId();
                         startActivity(new Intent(loginScreen.this, MainActivity.class));
                     }
@@ -70,10 +64,12 @@ public class loginScreen extends AppCompatActivity {
                 });
     }
     protected void events() {
+
+
         downPageText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"saklı dedik ya !",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),R.string.hideWarning,Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -84,7 +80,7 @@ public class loginScreen extends AppCompatActivity {
                 Passwd = passwordText.getText().toString();
 
                 if (Email.isEmpty() || Passwd.isEmpty() ) {
-                    Toast.makeText(loginScreen.this,"boş bırakılamaz", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(loginScreen.this,R.string.emptyWarning, Toast.LENGTH_SHORT).show();
                 }
 
                 else {
@@ -106,13 +102,13 @@ public class loginScreen extends AppCompatActivity {
 
     protected  void initialize() {
         progressBar.setVisibility(View.INVISIBLE);
-        logButton.setText("LOG IN");
-        signUp.setText("SIGN UP");
-        upPageText.setText("KLCLAUNDRY");
-        downPageText.setText("tüm hakları saklıdır");
+        logButton.setText(R.string.log_in);
+        signUp.setText(R.string.sign_up);
+        upPageText.setText(R.string.loginUpText);
+        downPageText.setText(R.string.loginDownText);
         downPageText.setClickable(true);
-        userNameText.setText(sp.getString("email",""));
-        passwordText.setText(sp.getString("password",""));
+        userNameText.setText(pService.get("email",""));
+        passwordText.setText(pService.get("password",""));
     }
 
     protected void definitions() {
@@ -123,26 +119,27 @@ public class loginScreen extends AppCompatActivity {
         userNameText = findViewById(R.id.logScreenUsername);
         passwordText = findViewById(R.id.logScreenPassword);
         signUp = findViewById(R.id.logScreenSignUp);
-        sp = getSharedPreferences("user",MODE_PRIVATE);
+        pService = new PreferenceService(getApplicationContext()); //hafizaya kaydetmek için bir nesne olşuturuyorum
 
         mAuth = FirebaseAuth.getInstance();
     }
 
     protected void RegTheId() {
 
+        /*
         char[] chars = Email.toCharArray();
-        String userName="";
+        String id="";
         for(int i=0;i<Email.length();i++) {
             if(chars[i] == '@' && (i+1)<Email.length()) {
-                userName = Email.split("@")[0];
+                id = Email.split("@")[0];
             }
         }
+         */
         //giriş yapan son kişinin kullanıcı adı
-        SharedPreferences sp2 = getSharedPreferences("USERNAME",MODE_PRIVATE); //USERNAME -> id
-        SharedPreferences.Editor edt = sp2.edit();
-        edt.putString("id",userName);
-        edt.apply();
 
+        pService.push("id",Email.split("@")[0]);
+        pService.push("email",Email);
+        pService.push("password",Passwd);
     }
 
 

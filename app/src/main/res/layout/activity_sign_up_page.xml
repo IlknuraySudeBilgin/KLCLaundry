@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="87dp"
-        android:text="KLC"
+        android:text="@string/signUpUpText"
         app:layout_constraintBottom_toTopOf="@+id/signUpEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
         android:ems="10"
-        android:hint="email"
+        android:hint="@string/signUpHintEmail"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/signUppassword"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="60dp"
         android:ems="10"
-        android:hint="password"
+        android:hint="@string/signUpHintPasswd"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/signUppasswordagain"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="62dp"
         android:ems="10"
-        android:hint="password again"
+        android:hint="@string/signUpHintPasswd2"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/signUpButton"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="125dp"
-        android:text="ONAYLA"
+        android:text="@string/signUpConfirm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -95,17 +95,5 @@
         app:layout_constraintStart_toEndOf="@+id/signUpEmail"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_question_mark_24" />
-
-    <EditText
-        android:id="@+id/getUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:ems="10"
-        android:hint="username"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/signUpEmail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

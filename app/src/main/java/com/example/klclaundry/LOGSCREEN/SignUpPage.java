@@ -27,12 +27,11 @@ import com.google.firebase.auth.FirebaseAuth;
 public class SignUpPage extends AppCompatActivity {
 
     private Button signButton;
-    private EditText email,passwd1, passwd2,userName;
-    private TextView notification;
+    private EditText email,passwd1, passwd2;
     private FirebaseAuth mAuth;
     private ProgressBar progress;
     private ImageView img;
-    private String getEmail,pass1,getUsername;
+    private String getEmail,pass1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +48,15 @@ public class SignUpPage extends AppCompatActivity {
     protected boolean IswrongPassword(String pass1 , String pass2) {
 
         if (pass1.isEmpty() || pass2.isEmpty()) {
-            Toast.makeText(SignUpPage.this, "boş bırakılamaz.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignUpPage.this, R.string.emptyWarning,Toast.LENGTH_SHORT).show();
             return true;
         }
         else if (pass1.length()<6) {
-            Toast.makeText(SignUpPage.this, "şifre 6 haneden az olamaz.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignUpPage.this, R.string.shotPassWarning,Toast.LENGTH_SHORT).show();
             return true;
         }
         else if (!pass1.equals(pass2)) {
-            Toast.makeText(SignUpPage.this, "şifreler eşleşmiyo.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignUpPage.this, R.string.doesntmatchPass,Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -67,7 +66,7 @@ public class SignUpPage extends AppCompatActivity {
 
     protected boolean Iswrong(String value) {
         if (value.isEmpty()) {
-            Toast.makeText(SignUpPage.this, "boş bırakılamaz.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignUpPage.this, R.string.emptyWarning,Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -75,14 +74,10 @@ public class SignUpPage extends AppCompatActivity {
     }
 
     protected boolean entriesControl() {
-        getUsername = userName.getText().toString();
         getEmail = email.getText().toString();
         pass1 = passwd1.getText().toString();
         String pass2 = passwd2.getText().toString();
 
-        if (getUsername.isEmpty()) {
-            Toast.makeText(getApplicationContext(),"kullanıcı adı boş bıraklımaz",Toast.LENGTH_SHORT).show();
-        }
         if (Iswrong(getEmail)) {
             return false;
         }
@@ -96,7 +91,7 @@ public class SignUpPage extends AppCompatActivity {
         img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"kullanıcıadi@___.com şeklinde giriş yapınız. ",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),R.string.signUpSupIMG,Toast.LENGTH_LONG).show();
             }
         });
         signButton.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +105,6 @@ public class SignUpPage extends AppCompatActivity {
     }
 
     protected void definitions() {
-        userName = findViewById(R.id.getUsername);
         img = findViewById(R.id.imageInfo);
         img.setClickable(true);
         signButton = findViewById(R.id.signUpButton);
@@ -119,7 +113,6 @@ public class SignUpPage extends AppCompatActivity {
         email = findViewById(R.id.signUpEmail);
         passwd1 = findViewById(R.id.signUppassword);
         passwd2 = findViewById(R.id.signUppasswordagain);
-        notification = findViewById(R.id.signUpScreenText);
 
         mAuth = FirebaseAuth.getInstance();//nesne oluşturduk internete baglanmak için
 
@@ -133,7 +126,7 @@ public class SignUpPage extends AppCompatActivity {
 
                         if (task.isSuccessful()) {
 
-                            Toast.makeText(getApplicationContext(), "kayıt başarılı",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), R.string.signup_success,Toast.LENGTH_LONG).show();
                             progress.setVisibility(View.VISIBLE);
 
                             startActivity(new Intent(SignUpPage.this, loginScreen.class));

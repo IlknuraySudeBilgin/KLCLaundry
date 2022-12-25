@@ -85,13 +85,12 @@ public class HomeFragment extends Fragment {
     protected void initialize() {
         defaultSizes();
         loadDataforUser();
-        StatementText.setText("her hangi bir işlem yok");
+        StatementText.setText(R.string.Noprocess);
         homeText.setVisibility(View.VISIBLE);
         StatementText.setVisibility(View.VISIBLE);
         StateImg.setVisibility(View.VISIBLE);
         addFloating.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.INVISIBLE);
-        //kullanıcın verileri databaseden çekilip yerine yerleşmesi için
     }
 
     protected void initializeForAdmin() {
@@ -99,15 +98,11 @@ public class HomeFragment extends Fragment {
         StatementText.setVisibility(View.INVISIBLE);
         StateImg.setVisibility(View.INVISIBLE);
         addFloating.setVisibility(View.INVISIBLE);
-
-
     }
 
     // tüm adminler burda tanımlı
     protected boolean IsAdmin() {
-        if(id.equals("admin")) return true;
-        else return false;
-
+        return id.equals("admin");
     }
 
     protected void events() {
@@ -116,10 +111,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (currentUser.getStatement() != -1) {
-                    Toast.makeText(getContext(),"zaten işlem sırasındasın! ",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),R.string.alreadyInProcess,Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.i("name:2 ",name);
-                    Toast.makeText(getContext(),name,Toast.LENGTH_SHORT).show();
                     UserAdaptor user = new UserAdaptor(name,0,id);
                     addFloating.setVisibility(View.INVISIBLE);
                     firebaseAdaptor.add(user);
@@ -182,29 +175,30 @@ public class HomeFragment extends Fragment {
 
 
     protected void updateStates(int value) {
+
         if (value == 0) {
-            StatementText.setText("henüz işleme girmedi");
+            StatementText.setText(R.string.HomeFragState0);
             StateImg.setImageResource(R.drawable.basket);
-            notif.senNotification("sıraya girdiniz","ÇAMAŞIRHANE");
+            notif.sendNotification(R.string.HomeFragState0,R.string.laundryRoom);
         }
         else if(value == 1) {
-            StatementText.setText("yıkanıyor");
+            StatementText.setText(R.string.HomeFragState1);
             StateImg.setImageResource(R.drawable.washing);
-            notif.senNotification("yıkanıyor","ÇAMAŞIRHANE");
+            notif.sendNotification(R.string.HomeFragState1,R.string.laundryRoom);
         }
         else if(value == 2) {
-            StatementText.setText("kurutuluyor");
+            StatementText.setText(R.string.HomeFragState2);
             StateImg.setImageResource(R.drawable.laundry);
-            notif.senNotification("kurutuluyor","ÇAMAŞIRHANE");
+            notif.sendNotification(R.string.HomeFragState2,R.string.laundryRoom);
         }
         else if(value == 3) {
-            StatementText.setText("çıktı");
+            StatementText.setText(R.string.HomeFragState3);
             StatementText.setScaleX(1.5F);
             StatementText.setScaleY(1.5F);
             StateImg.setScaleX(1.5F);
             StateImg.setScaleY(1.5F);
             StateImg.setImageResource(R.drawable.towels);
-            notif.senNotification("çıktı","ÇAMAŞIRHANE");
+            notif.sendNotification(R.string.HomeFragState3,R.string.laundryRoom);
         }
 
     }
@@ -252,9 +246,8 @@ public class HomeFragment extends Fragment {
                     user = d.getValue(UserAdaptor.class);
                     if (!d.getRef().getKey().equals("laundry")) // laundry 'i görme
                         allUsers.add(user); // tekrar dolduruluyo eger bosaltılmazsa varolan listeye ekleme yapılır
-
                 }
-
+                Log.i("usernameDatabase:",id);
                 userCard.notifyDataSetChanged();
 
 
@@ -262,7 +255,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("database hatasi: ",error.getMessage()); // hatalar daha iyi anlaşılmak için loglanmalı
+
             }
         });
     }
@@ -287,6 +280,7 @@ public class HomeFragment extends Fragment {
         sp = new PreferenceService(getActivity());
         id = sp.get("id",id);
         name = id;
+        Log.i("username:",id);
     }
 
     @Override
@@ -298,7 +292,7 @@ public class HomeFragment extends Fragment {
         whatIsUserName();
         notif = new pushNotService(getActivity());
 
-        if (sp.getInt("openorclose",0) == 0) homeText.setText("ÇAMAŞIRHANE:KAPALI");
-        else homeText.setText("ÇAMAŞIRHANE:AÇIK");
+        if (sp.getInt("openorclose",0) == 0) homeText.setText(R.string.laundryStateClose);
+        else homeText.setText(R.string.laundryStateOpen);
     }
 }

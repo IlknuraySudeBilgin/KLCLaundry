@@ -87,8 +87,6 @@ public class MainActivity extends AppCompatActivity {
 
     protected void events() {
 
-        //loadDataforUser();
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -106,25 +104,26 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.openOrClose:
-
+                        openCounter++;
+                        Log.i("user::",pService.get("id",""));
+                        Log.i("opencounter:",String.valueOf(openCounter));
+                        assert pService.get("id","").equals("admin");
                         if (pService.get("id","").equals("admin")) {
-                            //pushNotService pService = new pushNotService(getApplicationContext());
                             FirebaseAdaptor firebaseAdaptor = new FirebaseAdaptor();
-                            openCounter++;
-                            if (openCounter%2 == 0) {
+                            if (openCounter%2==0) {
                                 pService.pushInt("openorclose",0);
                                 firebaseAdaptor.LaundryOpenOrClose(false);
-                                item.setTitle("ÇAMAŞIRHANE: KAPALI");
+                                item.setTitle(R.string.laundryStateClose);
                                 item.setIcon(R.drawable.ic_baseline_lock_24);
-                                //pService.connect();
-                                openCounter=0;
+                                //pService.connect(); //henüz hazır değil
                             } else {
                                 pService.pushInt("openorclose",1);
                                 firebaseAdaptor.LaundryOpenOrClose(true);
-                                item.setTitle("ÇAMAŞIRHANE: AÇIK");
+                                item.setTitle(R.string.laundryStateOpen);
                                 item.setIcon(R.drawable.ic_baseline_lock_open_24);
                             }
                         }
+                        break;
 
 
                 }
@@ -142,7 +141,9 @@ public class MainActivity extends AppCompatActivity {
             drawer.closeDrawer(GravityCompat.START);
         }
         else {
+            pService.defaultUserAbout();
             super.onBackPressed();
+
         }
 
     }

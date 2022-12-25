@@ -2,4 +2,37 @@
     <string name="app_name">KLCLaundry</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="log_in">GİRİŞ YAP</string>
+    <string name="sign_up">KAYIT OL</string>
+    <string name="loginUpText">KLCLAUNDRY</string>
+    <string name="loginDownText">tüm hakları saklıdır</string>
+    <string name="loginHintUsername">kullanıcı adı</string>
+    <string name="loginHintPassword">şifre girin</string>
+    <string name="signUpHintUsername">KULLANICI ADI </string>
+    <string name="signUpHintEmail">EMAIL</string>
+    <string name="signUpHintPasswd">ŞİFRE</string>
+    <string name="signUpHintPasswd2">ŞİFRE TERKAR</string>
+    <string name="signUpConfirm">ONAYLA</string>
+    <string name="signUpSupIMG">kullanıcı_adı@___.com şeklinde giriniz</string>
+    <string name="signUpUpText">KLC</string>
+    <string name="HomeFragState_default">henüz işleme girmedi</string>
+    <string name="HomeFragState0">sıradasınız</string>
+    <string name="HomeFragState1">yıkanıyor</string>
+    <string name="HomeFragState2">kurutuluyor</string>
+    <string name="HomeFragState3">çıktı</string>
+    <string name="laundryRoom">ÇAMAŞIRHANE</string>
+    <string name="laundryStateOpen">ÇAMAŞIRHANE: AÇIK</string>
+    <string name="laundryStateClose">ÇAMAŞIRHANE: KAPALI</string>
+    <string name="Homefrag_name">EV</string>
+    <string name="Notfrag_name">bildirimler</string>
+    <string name="alreadyInProcess">zaten işlem sırasındasın!</string>
+    <string name="emptyWarning">Boş bırakılamaz!</string>
+    <string name="hideWarning">Saklı dedik ya!</string>
+    <string name="shotPassWarning">şifre en az 6 haneli olmalı</string>
+    <string name="doesntmatchPass">şifreler eşleşmiyo</string>
+    <string name="usernameEmptyWarning">Kullanıcı adı boş bırakılamaz</string>
+    <string name="signup_success">kayıt başarılı</string>
+    <string name="getAdmin">admin</string>
+    <string name="Noprocess">herhangi bir işlem yok</string>
+
 </resources>

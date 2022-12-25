@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="46dp"
             android:layout_marginBottom="40dp"
-            android:text="ÇAMAŞIRHANE:KAPALI"
+            android:text="@string/laundryStateClose"
             android:textColor="@color/mavi4"
             android:textSize="30sp"
             app:layout_constraintBottom_toTopOf="@+id/homeView"

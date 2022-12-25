@@ -49,7 +49,8 @@ public class pushNotService {
         return this.token;
     }
 
-    public void senNotification(String body, String title) {
+    public void sendNotification(int body, int title) {
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("1","1", NotificationManager.IMPORTANCE_HIGH);
 
@@ -58,8 +59,8 @@ public class pushNotService {
         }
 
         NotificationCompat.Builder b = new NotificationCompat.Builder(cnt,"1");
-        b.setContentTitle(title);
-        b.setContentText(body);
+        b.setContentTitle(cnt.getString(title));
+        b.setContentText(cnt.getString(body));
         b.setSmallIcon(R.drawable.mngpng);
         b.setAutoCancel(true);
 

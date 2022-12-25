@@ -7,12 +7,13 @@ import android.util.Log;
 public class PreferenceService {
     public final String PREF_NAME = "USERNAME";
     private final SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor edt;
 
     public PreferenceService(Context cnt) {
         sharedPreferences = cnt.getSharedPreferences(PREF_NAME,cnt.MODE_PRIVATE);
+        edt = this.sharedPreferences.edit();
     }
     public void push(String key, String value) {
-        SharedPreferences.Editor edt = this.sharedPreferences.edit();
         edt.putString(key, value);
         edt.apply();
     }
@@ -23,7 +24,6 @@ public class PreferenceService {
     }
 
     public void pushInt(String key, int value) {
-        SharedPreferences.Editor edt = this.sharedPreferences.edit();
         edt.putInt(key,value);
         edt.apply();
 
@@ -31,6 +31,13 @@ public class PreferenceService {
 
     public int getInt(String key, int def) {
         return this.sharedPreferences.getInt(key,def);
+    }
+
+    public void defaultUserAbout() {
+        edt.putString("name","");
+        edt.putString("id","");
+        edt.putInt("state",-1);
+        edt.apply();
     }
 
 
